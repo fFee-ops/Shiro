@@ -1,6 +1,6 @@
 package java.org.lanqiao.maven;
 public class HelloWorld{
-	//第san次。。。。。。。
+	//please pull me！
 	public String sayHello(String name){
 		return "Hello "+name ;
 	}
