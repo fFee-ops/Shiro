@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.sl.spring.realm.UserRealm;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+
 @Configuration
 public class ShiroConfig {
 /**
@@ -56,14 +58,36 @@ public class ShiroConfig {
 		 *       role: 该资源必须得到角色权限才可以访问
 		 */
 		Map<String, String> map=new LinkedHashMap<String, String>();
-		//要过滤什么请求
+		//放行/tologin请求
 		map.put("/tologin", "anon");
-		map.put("/*", "authc");
+		
+		
+		//授权过滤器
+		//注意，当前授权拦截后，Shiro会自动跳转到一个提示未授权的页面
+		map.put("/add", "perms[user:add]");
+		map.put("/update", "perms[user:update]");
+		
+		//要过滤什么请求
+		map.put("/*", "authc");//这个一定要写最后，不然没办法执行授权逻辑（过滤链是有顺序的）
 		
 		//修改被拦截后的跳转页面
 		factoryBean.setLoginUrl("/login");
 		
+		
+		//设置未授权提示页面
+		factoryBean.setUnauthorizedUrl("/unAuth");
+		
+		
 		factoryBean.setFilterChainDefinitionMap(map);
 		return factoryBean;
 	}
+	
+	/**
+	 * 配置ShiroDialect，用于thymeleaf和shiro标签配合使用
+	 */
+	@Bean
+	public ShiroDialect getShiroDialect(){
+		return new ShiroDialect();
+	}
+
 }

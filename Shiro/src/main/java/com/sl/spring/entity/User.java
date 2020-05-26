@@ -4,6 +4,17 @@ public class User {
 private int id;
 private String name;
 private String password;
+private String perms;
+public String getPerms() {
+	return perms;
+}
+@Override
+public String toString() {
+	return "User [id=" + id + ", name=" + name + ", password=" + password + ", perms=" + perms + "]";
+}
+public void setPerms(String perms) {
+	this.perms = perms;
+}
 public int getId() {
 	return id;
 }

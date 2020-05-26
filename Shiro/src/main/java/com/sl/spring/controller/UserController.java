@@ -36,6 +36,8 @@ private final String PREFIX = "user/";
 	public String login(){
 		return "login";
 	}
+	
+	
 	/**
 	 * 登录逻辑处理
 	 */
@@ -64,5 +66,13 @@ private final String PREFIX = "user/";
 		}
 	
 	}
+	
+	
+	@RequestMapping("/unAuth")
+	public String unAuth(){
+		return "unAuth";
+	}
+	
+	
 	
 }

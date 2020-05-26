@@ -1,13 +1,16 @@
 package com.sl.spring.realm;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sl.spring.entity.User;
@@ -20,7 +23,17 @@ public class UserRealm  extends AuthorizingRealm{
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		System.out.println("执行授权逻辑");
-		return null;
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+				
+				
+		//获取当前登录的用户
+		Subject subject = SecurityUtils.getSubject();	
+		User user=(User) subject.getPrincipal();
+		
+		User dUser=service.findById(user.getId());
+		System.out.println(dUser.toString());
+		info.addStringPermission(dUser.getPerms());
+				return info;
 	}
 
 	/*
@@ -47,7 +60,7 @@ public class UserRealm  extends AuthorizingRealm{
 		}
 		
 		//2、判断密码
-		return new SimpleAuthenticationInfo("",user.getPassword(),"");
+		return new SimpleAuthenticationInfo(user,user.getPassword(),"");
 	}
 
 }
